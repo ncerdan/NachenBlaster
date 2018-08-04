@@ -10,124 +10,203 @@ class NachenBlaster;
 
 // Students:  Add code to this file, Actor.cpp, StudentWorld.h, and StudentWorld.cpp
 
-class Actor : public GraphObject	//ABSTRACT CLASS
+//ABSTRACT CLASS
+class Actor : public GraphObject
 {
 public:
 	Actor(int imageID, int startX, int startY, StudentWorld* world, bool isAlien, bool isNB,
 		bool canCollideWNB, bool canCollideWAliens, int startDirection = 0, double size = 1.0, int depth = 0);
 	virtual void doSomething() = 0;
-	bool getIsActive() const;		//public getter bc used in StudentWorld.move()
+	
+	//public getter bc used in StudentWorld.move()
+	bool getIsActive() const;
 
-	bool isAlien() const;			//used for differentiating objects
-	bool isNB() const;				//
-	bool canCollideWNB() const;		//
-	bool canCollideWAliens() const;	//
+	//used for differentiating objects
+	bool isAlien() const;			
+	bool isNB() const;				
+	bool canCollideWNB() const;		
+	bool canCollideWAliens() const;	
 
-	bool collidesWOtherActor(Actor* a) const;	//used Euclidian distance formula
+	//uses Euclidian distance formula
+	bool collidesWOtherActor(Actor* a) const;
 protected:
-	void setIsActive(bool b);			//getters and setters used in derived classes
-	void setCanCollideWNB(bool b);		//
-	void setCanCollideWAliens(bool b);	//
-	StudentWorld* getWorld() const;		//
+	//getters and setters used in derived classes
+	void setIsActive(bool b);			
+	void setCanCollideWNB(bool b);		
+	void setCanCollideWAliens(bool b);	
+	StudentWorld* getWorld() const;		
 private:
-	StudentWorld * m_world;		//is world it is in
-	bool m_isActive;			//is alive
-	bool m_isAlien;				//aliens
-	bool m_isNB;				//NachenBlaster
-	bool m_canCollideWNB;		//turnips, bad FTorps, Aliens, Goodies
-	bool m_canCollideWAliens;	//Cabbage, good FTorps, Aliens
+	//world it is in
+	StudentWorld * m_world;		
+	
+	//is alive
+	bool m_isActive;
+
+	//aliens
+	bool m_isAlien;	
+
+	//NachenBlaster
+	bool m_isNB;				
+
+	//turnips, bad FTorps, Aliens, Goodies
+	bool m_canCollideWNB;		
+
+	//Cabbage, good FTorps, Aliens
+	bool m_canCollideWAliens;	
 };
 
-class Interactor : public Actor		//ABSTRACT CLASS
+//ABSTRACT CLASS
+class Interactor : public Actor		
 {
 public:
 	Interactor(int imageID, int startX, int startY, StudentWorld* world, bool isAlien, bool isNB,
 		bool canCollideWNB, bool canCollideWAliens, int startDirection = 0, double size = 1.0, int depth = 0);
-	virtual void interact(Interactor* i) = 0;	//ALL Interactors must be able to interact
-	virtual bool checkCollisions() = 0;			// by checking for collisions. return true if it found collision (only used by goodie)
+	
+	//ALL Interactors must be able to interact
+	virtual void interact(Interactor* i) = 0;	
+	
+	//ALL Interactros must check for collisions. return true if it found collision (only used by goodie)
+	virtual bool checkCollisions() = 0;			
 };
 
 class Goodie : public Interactor
 {
 public:
-	Goodie(int imageID, int startX, int startY, StudentWorld* world);		//must pass imageID upon creation to distinguish which one it is
+	//must pass imageID upon creation to distinguish which one it is
+	Goodie(int imageID, int startX, int startY, StudentWorld* world);
 	virtual void doSomething();
 	virtual void interact(Interactor* nb);
 	virtual bool checkCollisions();
 private:
-	void giveBonus(NachenBlaster* nb);	//uses m_goodieID to give proper bonus
+	//uses m_goodieID to give proper bonus
+	void giveBonus(NachenBlaster* nb);	
 
-	const int ELG = 0;	//used to determine what type of Goodie it is
-	const int RG = 1;	//
-	const int TG = 2;	//
-	int m_goodieID;		//must be one of the above consts
+	//used to determine what type of Goodie it is
+	const int ELG = 0;	
+	const int RG = 1;	
+	const int TG = 2;
+
+	//must be one of the above consts
+	int m_goodieID;		
 };
 
-class SpaceShip : public Interactor	//ABSTRACT CLASS
+//ABSTRACT CLASS
+class SpaceShip : public Interactor	
 {
 public:
 	SpaceShip(int imageID, int startX, int startY, StudentWorld* world, bool isAlien, bool isNB,
 		bool canCollideWNB, bool canCollideWAliens, int startDirection = 0, double size = 1.0, int depth = 0);
 	virtual void sufferDamage(double amountToDecrease);
-	virtual void interact(Interactor* p);	//only time this will be called is if p is a projectile and I call it. otherwise only other virtual functions w be called
-	double getHP() const;					//used for string output
+
+	//only time this will be called is if p is a projectile and a member function calls it. otherwise only other virtual functions w be called
+	virtual void interact(Interactor* p);	
+
+	//used for string output
+	double getHP() const;					
 protected:
-	virtual void shoot() = 0;	//varies by NB to Alien to Snagglegon
-	void setHP(double h);		//setters and getters used in derived classes	
+	//varies by NB to Alien to Snagglegon
+	virtual void shoot() = 0;	
+
+	//setters and getters used in derived classes
+	void setHP(double h);			
 private:
-	double m_hp;		//health
+	//health
+	double m_hp;		
 };
 
 class NachenBlaster : public SpaceShip
 {
 public:
 	NachenBlaster(StudentWorld* world);
-	virtual void doSomething();						//checks for input etc
-	virtual bool checkCollisions();					//checks for Aliens, non-Friendly Projectiles, or Goodie
-	virtual void interact(Interactor* ALorPJorGD);	//interacts w either Alien, Projectile, or Goodie
-	void increaseHP(int amountToIncreaseItBy);		//takes number to increase it by. caps at 50
-	void recTorpedo();								//gives 5 torpedos, no cap
+
+	//checks for input etc
+	virtual void doSomething();	
+
+	//checks for Aliens, non-Friendly Projectiles, or Goodie
+	virtual bool checkCollisions();	
+
+	//interacts w either Alien, Projectile, or Goodie
+	virtual void interact(Interactor* ALorPJorGD);
+
+	//takes number to increase it by. caps at 50
+	void increaseHP(int amountToIncreaseItBy);	
+
+	//gives 5 torpedos, no cap
+	void recTorpedo();	
+
+	//getters
 	int getFTorpedos();
 	int getCabbage();
 private:
-	virtual void shoot();			//for cabbage
-	void shoot(int doesntMatter);	//for torpedos
-	int m_cabbage;		//ammo
-	int m_fTorpedos;	//
+	//for shooting cabbage
+	virtual void shoot();
+
+	//for shooting torpedos
+	void shoot(int doesntMatter);	
+	
+	//ammo
+	int m_cabbage;		
+	int m_fTorpedos;
 };
 
 class Alien : public SpaceShip
 {
 public:
 	Alien(int imageID, int startX, int startY, StudentWorld* world);
-	virtual void sufferDamage(double amountToDecrease);	//used by Smallgon. Other two cal this then might drop goodie
-	virtual void interact(Interactor* projectileOrNB);	//is either Projectile or NB
-	void crash(NachenBlaster* n);						//hurts NB, increases score, kills alien
-	virtual bool checkCollisions();						//checks for NB or Projectile
-	virtual void doSomething();							//used by all 3 types of aliens (functions handle different behaviors)
+
+	//used by Smallgon. Other two call this then might drop goodie
+	virtual void sufferDamage(double amountToDecrease);	
+
+	//param is either Projectile or NB
+	virtual void interact(Interactor* projectileOrNB);	
+
+	//hurts NB, increases score, kills alien
+	void crash(NachenBlaster* n);	
+
+	//checks for NB or Projectile
+	virtual bool checkCollisions();		
+
+	//used by all 3 types of aliens (functions handle different behaviors)
+	virtual void doSomething();							
 protected:
-	int getFlightPlan() const;				//getters and setters used in derived classes
-	int getFlightPlanLength() const;		//
-	double getTravelSpeed() const;			//
-	void setFlightPlan(int i);				//
-	void setFlightPlanLength(int i);		//
-	void setTravelSpeed(double d);			//
-	void setPointsForDeath(int i);			//
-	void setDamageOnCrash(int i);			//
-	virtual void shoot();					//used by 2 types of aliens, snagglegon defines its own
-	virtual void move();					//used by 2 types of aliens, snagglegon has its own which calls this but then keeps flightPlanLength from changing
-	void changeFlightPlanIfNeeded();		//used by all 3 types of aliens (bc snagglegon's length will never = 0)
-	virtual bool maybeShootOrChangePlan();	//used by 1 type: snagglgon defines its own w different odds. smoregon calls this then adds something at end
-											//    for changing plan to charge. if returns true, end current tick. if false, continue w doSomething()
-	const int DUE_LEFT = 0;			//represents 3 possible flight plans
-	const int UP_AND_LEFT = 1;		//
-	const int DOWN_AND_LEFT = 2;	//
+	//getters and setters used in derived classes
+	int getFlightPlan() const;				
+	int getFlightPlanLength() const;		
+	double getTravelSpeed() const;			
+	void setFlightPlan(int i);				
+	void setFlightPlanLength(int i);		
+	void setTravelSpeed(double d);			
+	void setPointsForDeath(int i);			
+	void setDamageOnCrash(int i);		
+
+	//used by 2 types of aliens, snagglegon defines its own
+	virtual void shoot();	
+
+	//used by 2 types of aliens, snagglegon has its own which calls this but then keeps flightPlanLength from changing
+	virtual void move();		
+
+	//used by all 3 types of aliens (bc snagglegon's length will never = 0)
+	void changeFlightPlanIfNeeded();		
+
+	//used by 1 type: snagglgon defines its own w different odds. smoregon calls this then adds something at end. if true, end tick. if false, continue w doSomething()
+	virtual bool maybeShootOrChangePlan();	
+	
+	//represents 3 possible flight plans
+	const int DUE_LEFT = 0;			
+	const int UP_AND_LEFT = 1;		
+	const int DOWN_AND_LEFT = 2;	
 private:
-	int m_flightPlan;			//always one of the protected consts above
+	//always one of the protected consts above
+	int m_flightPlan;
+
 	int m_flightPlanLength;
 	double m_travelSpeed;
-	int m_pointsForDeath;		//points given to player when killed
-	int m_damageOnNBForCrash;	//hp of NB reduced upon impact
+
+	//points given to player when killed
+	int m_pointsForDeath;		
+
+	//hp of NB reduced upon impact
+	int m_damageOnNBForCrash;	
 };
 
 class Smallgon : public Alien
@@ -177,22 +256,38 @@ class Projectile : public Interactor
 public:
 	Projectile(int imageID, int startX, int startY, StudentWorld* world, bool canCollideWNB,
 		bool canCollideWAliens, int startDirection, int velocity, bool rotates, bool isFriendly);
-	virtual void doSomething();				//used by all 3 types of projectiles
-	void impact(SpaceShip* s);				//impacts s. used by all three types of projectiles
-	virtual bool checkCollisions();			//checks for either isAlien or isNB depending on isFriendly. used by all 3
-	virtual void interact(Interactor* s);	//s will only be of type ship. used by all 3
+
+	//used by all 3 types of projectiles
+	virtual void doSomething();		
+
+	//impacts s. used by all three types of projectiles
+	void impact(SpaceShip* s);	
+
+	//checks for either isAlien or isNB depending on isFriendly. used by all 3
+	virtual bool checkCollisions();	
+
+	//s will only be of type ship. used by all 3
+	virtual void interact(Interactor* s);	
 protected:
-	int getVelocity() const;		//getters and setter used in derived classes
-	bool getRotates() const;		//
-	bool getIsFriendly() const;		//
-	void setVelocity(int v);		//
-	void setIsFriendly(bool b);		//
-	void setDamageOnContact(int i);	//
+	//getters and setter used in derived classes
+	int getVelocity() const;		
+	bool getRotates() const;		
+	bool getIsFriendly() const;		
+	void setVelocity(int v);		
+	void setIsFriendly(bool b);		
+	void setDamageOnContact(int i);	
 private:
-	int m_velocity;				//negative indicates left, number indicates pixels per tick
-	bool m_rotates;				//true if it rotates every tick (turnip/cabbage)
-	bool m_isFriendly;			//true if fired by NB and hits alien, false if fired by alien and hits NB
-	int m_damageOnContact;		//damage it does when hitting a ship
+	//negative indicates left, number indicates pixels per tick
+	int m_velocity;				
+
+	//true if it rotates every tick (turnip/cabbage)
+	bool m_rotates;	
+
+	//true if fired by NB and hits alien, false if fired by alien and hits NB
+	bool m_isFriendly;			
+
+	//damage it does when hitting a ship
+	int m_damageOnContact;		
 };
 
 class Cabbage : public Projectile

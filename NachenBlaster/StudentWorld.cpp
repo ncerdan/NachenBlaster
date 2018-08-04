@@ -14,85 +14,97 @@ GameWorld* createStudentWorld(string assetDir) { return new StudentWorld(assetDi
 StudentWorld::StudentWorld(string assetDir)
 	: GameWorld(assetDir)
 {
-	m_totalAliensNeededToKillForLevel = 6 + (4 * getLevel());	//stats set at start of level
-	m_numAliensKilled = 0;										//
-	m_totalNumOfAliensOnScreen = 0;								//
+	//stats set at start of level
+	m_totalAliensNeededToKillForLevel = 6 + (4 * getLevel());	
+	m_numAliensKilled = 0;										
+	m_totalNumOfAliensOnScreen = 0;								
 }
 
-StudentWorld::~StudentWorld() { cleanUp(); }	//just calls cleanUp()
+//just calls cleanUp()
+StudentWorld::~StudentWorld() { cleanUp(); }	
 
 int StudentWorld::init()
 {
-	m_totalAliensNeededToKillForLevel = 6 + (4 * getLevel());	//stats set at start of level
-	m_numAliensKilled = 0;										//
-	m_totalNumOfAliensOnScreen = 0;								//
+	//stats set at start of level
+	m_totalAliensNeededToKillForLevel = 6 + (4 * getLevel());	
+	m_numAliensKilled = 0;										
+	m_totalNumOfAliensOnScreen = 0;								
 
-	m_nachenBlaster = new NachenBlaster(this);					//creates a new NachenBlaster object
-	m_actors.push_back(m_nachenBlaster);						//and also saves its pointer in vector
+	//creates a new NachenBlaster object and saves its pointer in vector
+	m_nachenBlaster = new NachenBlaster(this);					
+	m_actors.push_back(m_nachenBlaster);						
 
-	for (int i = 0; i < 30; i++)								//creates 30 new stars
-	{															//
-		m_actors.push_back(new Star(randInt(0, VIEW_WIDTH - 1),	//
-			randInt(0, VIEW_HEIGHT - 1),	//
-			this));						//
-	}															//
+	//creates 30 new stars
+	for (int i = 0; i < 30; i++)								
+	{															
+		m_actors.push_back(new Star(randInt(0, VIEW_WIDTH - 1),	
+			randInt(0, VIEW_HEIGHT - 1),	
+			this));						
+	}															
 
-	return GWSTATUS_CONTINUE_GAME;								//returns continue game value
+	//returns continue game value
+	return GWSTATUS_CONTINUE_GAME;								
 }
 
 int StudentWorld::move()
 {
 	////////////////////// ACTORS "DO SOMETHING" //////////////////////
 
-	for (int i = 0; i < m_actors.size(); i++)					//has every actor doSomething()
-	{															//	including NB
-		m_actors[i]->doSomething();								//
-	}															//
+	//has every actor doSomething(), including NB
+	for (int i = 0; i < m_actors.size(); i++)					
+	{															
+		m_actors[i]->doSomething();								
+	}															
 
-																////////////////////// CHECK NB STATUS /////////////////////
+	////////////////////// CHECK NB STATUS /////////////////////
 
-	if (m_nachenBlaster->getIsActive() == false)					//checks if player dies	
-	{																//
-		decLives();													//
-		return GWSTATUS_PLAYER_DIED;								//		
-	}																//	
-	else															//if alive check num of aliens killed
-	{																//
-		if (m_numAliensKilled >= m_totalAliensNeededToKillForLevel)	//
+	//checks if player dies
+	if (m_nachenBlaster->getIsActive() == false)						
+	{																
+		decLives();													
+		return GWSTATUS_PLAYER_DIED;										
+	}																	
+	else															
+	{	
+		//if alive check num of aliens killed
+		if (m_numAliensKilled >= m_totalAliensNeededToKillForLevel)	
 			return GWSTATUS_FINISHED_LEVEL;
 	}
 
 	/////////////////////// ADD NEW ACTORS ///////////////////////
 
-	if (randInt(1, 15) == 1)									//checks if needs to add new star to RHS (1/15 chance)
-		m_actors.push_back(new Star(VIEW_WIDTH - 1,				//
-			randInt(0, VIEW_HEIGHT - 1),						//
-			this));												//
+	//checks if needs to add new star to RHS of screen (1/15 chance)
+	if (randInt(1, 15) == 1)									
+		m_actors.push_back(new Star(VIEW_WIDTH - 1,				
+			randInt(0, VIEW_HEIGHT - 1),						
+			this));												
 
-	int D = m_numAliensKilled;												//calculate whether to add a new Alien
-	int T = m_totalAliensNeededToKillForLevel;								//
-	int R = T - D;															//
-	double M = 4 + (.5 * getLevel());										//
-	if (m_totalNumOfAliensOnScreen < M && m_totalNumOfAliensOnScreen < R)	//if its less than min(M, R) AKA less than both
-		addOneNewAlien();													//add an Alien
+	//calculate whether to add a new Alien
+	int D = m_numAliensKilled;												
+	int T = m_totalAliensNeededToKillForLevel;								
+	int R = T - D;															
+	double M = 4 + (.5 * getLevel());
+	if (m_totalNumOfAliensOnScreen < M && m_totalNumOfAliensOnScreen < R)	
+		addOneNewAlien();
 
-																			/////////////////// CLEAN UP DEAD ACTORS //////////////////
+	/////////////////// CLEAN UP DEAD ACTORS //////////////////
 
+	//checks/deletes all dead actors, skipping NB
+	for (int i = 0; i < m_actors.size();)									
+	{																		
+		if (m_actors[i] != m_nachenBlaster && !m_actors[i]->getIsActive())	
+		{
+			//if its an alien update stat
+			if (m_actors[i]->isAlien())										
+				m_totalNumOfAliensOnScreen--;								
+			delete m_actors[i];												
+			m_actors.erase(m_actors.begin() + i);							
+		}																	
+		else																
+			i++;															
+	}																		
 
-	for (int i = 0; i < m_actors.size();)									//checks/deletes all dead actors
-	{																		//	skipping NB
-		if (m_actors[i] != m_nachenBlaster && !m_actors[i]->getIsActive())	//
-		{																	//
-			if (m_actors[i]->isAlien())										//if its an alien update stat
-				m_totalNumOfAliensOnScreen--;								//
-			delete m_actors[i];												//
-			m_actors.erase(m_actors.begin() + i);							//
-		}																	//
-		else																//
-			i++;															//
-	}																		//
-
-																			//////////////////// PRINT SCORE AT TOP /////////////////////
+	//////////////////// PRINT SCORE AT TOP /////////////////////
 	ostringstream oss;
 	double hpPercent = (m_nachenBlaster->getHP() / 50.0) * 100;
 	double cabbagePercent = (m_nachenBlaster->getCabbage() / 30.0) * 100;
@@ -108,11 +120,12 @@ int StudentWorld::move()
 
 void StudentWorld::cleanUp()
 {
-	for (int i = 0; i < m_actors.size();)		//deletes all actors left in the actor vector
-	{											//
-		delete m_actors[i];						//
-		m_actors.erase(m_actors.begin());		//
-	}											//
+	//deletes all actors left in the actor vector
+	for (int i = 0; i < m_actors.size();)		
+	{											
+		delete m_actors[i];						
+		m_actors.erase(m_actors.begin());		
+	}											
 }
 
 void StudentWorld::addActorToVector(Actor* a) { m_actors.push_back(a); }
@@ -129,12 +142,14 @@ void StudentWorld::addOneNewAlien()
 	int S = S1 + S2 + S3;
 	int i = randInt(1, S);
 
-	if (i <= S1)																				//with S1/S odds add a new Smallgon
-		addActorToVector(new Smallgon(VIEW_WIDTH - 1, randInt(0, VIEW_HEIGHT - 1), this));		//
-	else if (i <= S1 + S2)																		//with S2/S odds add a new Smoregon
-		addActorToVector(new Smoregon(VIEW_WIDTH - 1, randInt(0, VIEW_HEIGHT - 1), this));		//
-	else																						//with S3/S odds add a new Snagglegon
-		addActorToVector(new Snagglegon(VIEW_HEIGHT - 1, randInt(0, VIEW_HEIGHT - 1), this));	//
+	//with S1/S odds add a new Smallgon, with S2/S odds add a new Smoregon, with S3/S odds add a new Snagglegon
+	if (i <= S1)																				
+		addActorToVector(new Smallgon(VIEW_WIDTH - 1, randInt(0, VIEW_HEIGHT - 1), this));		
+	else if (i <= S1 + S2)																		
+		addActorToVector(new Smoregon(VIEW_WIDTH - 1, randInt(0, VIEW_HEIGHT - 1), this));		
+	else																						
+		addActorToVector(new Snagglegon(VIEW_HEIGHT - 1, randInt(0, VIEW_HEIGHT - 1), this));	
 
-	m_totalNumOfAliensOnScreen++;		//increase this to keep track
+	//increment this to keep track
+	m_totalNumOfAliensOnScreen++;
 }

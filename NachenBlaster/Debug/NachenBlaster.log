@@ -1,24 +1,16 @@
 ﻿  Actor.cpp
-c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\actor.cpp(168): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\actor.cpp(207): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\actor.cpp(306): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\actor.cpp(308): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\actor.cpp(348): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\actor.cpp(354): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\actor.cpp(467): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\actor.cpp(477): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\studentworld.h(45): warning C4018: '<': signed/unsigned mismatch
-  c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\actor.cpp(106): note: see reference to function template instantiation 'bool StudentWorld::checkCollisions_wThingsThat<bool(__thiscall Actor::* )(void) const>(Func,Interactor *)' being compiled
+c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\actor.cpp(195): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\actor.cpp(242): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\actor.cpp(362): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\actor.cpp(364): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\actor.cpp(410): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\actor.cpp(417): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\actor.cpp(551): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\actor.cpp(563): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\studentworld.h(58): warning C4018: '<': signed/unsigned mismatch
+  c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\actor.cpp(116): note: see reference to function template instantiation 'bool StudentWorld::checkCollisions_wThingsThat<bool(__thiscall Actor::* )(void) const>(Func,Interactor *)' being compiled
           with
           [
               Func=bool (__thiscall Actor::* )(void) const
           ]
-  StudentWorld.cpp
-c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\studentworld.cpp(47): warning C4018: '<': signed/unsigned mismatch
-c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\studentworld.cpp(82): warning C4018: '<': signed/unsigned mismatch
-c:\users\ncerd\visual studio workspace\school\cs32 - c++\project3\nachenblaster\nachenblaster\studentworld.cpp(111): warning C4018: '<': signed/unsigned mismatch
-  GameController.cpp
-  GameWorld.cpp
-  main.cpp
-  Generating Code...
   NachenBlaster.vcxproj -> C:\Users\ncerd\Visual Studio Workspace\School\CS32 - C++\Project3\NachenBlaster\Debug\NachenBlaster.exe
